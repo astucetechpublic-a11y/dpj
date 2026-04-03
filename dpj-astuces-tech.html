@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DPJ Astuces Tech | Boutique Numérique</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-pale: #F5E6BB;
+    --black: #0A0A0A;
+    --dark: #111111;
+    --dark2: #1A1A1A;
+    --dark3: #222222;
+    --card-bg: #161616;
+    --text: #E8E8E8;
+    --text-muted: #888888;
+    --text-dim: #555555;
+    --green: #22C55E;
+    --red: #EF4444;
+    --wave: #1B9CF2;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--black);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--dark); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  /* ── FADE IN ANIMATION ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── GOLD LINE TOP ── */
+  .gold-line-top {
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent);
+  }
+
+  /* ── PROMO BANNER ── */
+  .promo-banner {
+    background: linear-gradient(90deg, rgba(201,168,76,0.12), rgba(201,168,76,0.06), rgba(201,168,76,0.12));
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    text-align: center;
+    padding: 8px 2rem;
+    font-size: 0.78rem;
+    color: var(--gold-light);
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .promo-banner .blink {
+    display: inline-block;
+    width: 7px; height: 7px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: blink 1.5s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+    padding: 0 2rem;
+  }
+
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  .logo-icon {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; font-weight: 800;
+    color: var(--black);
+    font-family: 'Syne', sans-serif;
+    flex-shrink: 0;
+  }
+
+  .logo-text .name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.05rem;
+    color: var(--gold); letter-spacing: 0.5px;
+  }
+  .logo-text .tagline {
+    font-size: 0.68rem; color: var(--text-muted);
+    letter-spacing: 1.5px; text-transform: uppercase;
+  }
+
+  .nav-right { display: flex; align-items: center; gap: 1.2rem; }
+
+  .nav-link {
+    color: var(--text-muted); text-decoration: none;
+    font-size: 0.85rem; letter-spacing: 0.5px; transition: color 0.2s;
+  }
+  .nav-link:hover { color: var(--gold); }
+
+  .cart-btn {
+    position: relative;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold);
+    padding: 8px 16px; border-radius: 8px;
+    cursor: pointer; font-size: 0.85rem;
+    font-family: 'DM Sans', sans-serif;
+    display: flex; align-items: center; gap: 8px;
+    transition: all 0.2s;
+  }
+  .cart-btn:hover { background: rgba(201,168,76,0.2); border-color: var(--gold); }
+
+  .cart-count {
+    background: var(--gold); color: var(--black);
+    font-weight: 700; font-size: 0.7rem;
+    min-width: 18px; height: 18px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 4px; transition: transform 0.2s;
+  }
+  .cart-count.bump { animation: bump 0.3s ease; }
+  @keyframes bump { 0%{transform:scale(1)} 50%{transform:scale(1.4)} 100%{transform:scale(1)} }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    padding: 80px 2rem 60px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute; top: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 700px; height: 500px;
+    background: radial-gradient(ellipse, rgba(201,168,76,0.14) 0%, transparent 70%);
+    pointer-events: none;
+    animation: pulse-glow 4s ease-in-out infinite;
+  }
+  @keyframes pulse-glow { 0%,100%{opacity:0.7} 50%{opacity:1} }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.25);
+    color: var(--gold); font-size: 0.75rem;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 6px 16px; border-radius: 20px; margin-bottom: 20px;
+    animation: fadeDown 0.8s ease both;
+  }
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    font-weight: 800; line-height: 1.1; margin-bottom: 1rem;
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+  .hero h1 .accent {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    color: var(--text-muted); font-size: 1rem;
+    max-width: 480px; margin: 0 auto 2rem; line-height: 1.7;
+    animation: fadeUp 0.8s ease 0.35s both;
+  }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+  .hero-stats {
+    display: inline-flex; gap: 2.5rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 16px 32px; border-radius: 16px; margin-bottom: 1rem;
+    animation: fadeUp 0.8s ease 0.5s both;
+  }
+
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem; font-weight: 800; color: var(--gold);
+  }
+  .stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ── SECTION ── */
+  .section { max-width: 1200px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+
+  .section-header {
+    margin-bottom: 2.5rem;
+    display: flex; align-items: flex-end;
+    justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+  }
+
+  .section-label { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+  .section-title { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--text); }
+
+  /* ── PRODUCTS GRID ── */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .product-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px; overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    position: relative; cursor: pointer;
+  }
+  .product-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(201,168,76,0.3);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,168,76,0.1);
+  }
+
+  .product-img {
+    width: 100%; height: 180px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem; position: relative; overflow: hidden;
+  }
+  .product-img::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, var(--card-bg));
+  }
+
+  /* Sales counter badge */
+  .sales-counter {
+    position: absolute; bottom: 10px; right: 10px;
+    z-index: 2;
+    background: rgba(0,0,0,0.7);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold); font-size: 0.65rem; font-weight: 700;
+    padding: 3px 8px; border-radius: 20px;
+    display: flex; align-items: center; gap: 4px;
+  }
+
+  .product-badge {
+    position: absolute; top: 12px; left: 12px; z-index: 2;
+    font-size: 0.65rem; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 20px;
+  }
+  .badge-new { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+  .badge-popular { background: rgba(201,168,76,0.15); color: var(--gold); border: 1px solid rgba(201,168,76,0.3); }
+  .badge-hot { background: rgba(239,68,68,0.15); color: #FF6B6B; border: 1px solid rgba(239,68,68,0.3); }
+
+  .product-body { padding: 1.2rem; }
+  .product-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 0.5rem; line-height: 1.3; }
+  .product-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem; }
+
+  .product-features { list-style: none; margin-bottom: 1.2rem; }
+  .product-features li {
+    font-size: 0.78rem; color: var(--text-muted);
+    padding: 2px 0; display: flex; align-items: center; gap: 6px;
+  }
+  .product-features li::before { content: '✓'; color: var(--gold); font-weight: 700; font-size: 0.7rem; }
+
+  .product-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+  .product-price { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.2rem; color: var(--gold); }
+  .price-currency { font-size: 0.75rem; font-weight: 400; color: var(--text-muted); margin-left: 2px; }
+
+  .btn-add {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--black); border: none;
+    padding: 8px 16px; border-radius: 8px;
+    font-weight: 700; font-size: 0.82rem;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    display: flex; align-items: center; gap: 6px;
+    transition: all 0.2s; letter-spacing: 0.3px;
+  }
+  .btn-add:hover { transform: scale(1.04); box-shadow: 0 4px 20px rgba(201,168,76,0.4); }
+  .btn-add:active { transform: scale(0.97); }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials-section {
+    background: rgba(255,255,255,0.01);
+    border-top: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    padding: 4rem 2rem;
+  }
+
+  .testimonials-inner { max-width: 1200px; margin: 0 auto; }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .testimonial-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 1.5rem;
+    position: relative;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .testimonial-card:hover {
+    border-color: rgba(201,168,76,0.25);
+    transform: translateY(-3px);
+  }
+
+  .testimonial-quote {
+    font-size: 2.5rem;
+    color: var(--gold);
+    opacity: 0.3;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    font-family: Georgia, serif;
+  }
+
+  .testimonial-text {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 1.2rem;
+    font-style: italic;
+  }
+
+  .testimonial-footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .testimonial-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.9rem;
+    color: var(--black);
+    font-family: 'Syne', sans-serif;
+    flex-shrink: 0;
+  }
+
+  .testimonial-name { font-weight: 600; font-size: 0.85rem; }
+  .testimonial-location { font-size: 0.72rem; color: var(--text-dim); }
+
+  .testimonial-stars { color: var(--gold); font-size: 0.75rem; margin-bottom: 2px; }
+
+  /* ── WHY US ── */
+  .why-section { padding: 4rem 2rem; }
+  .why-inner { max-width: 1200px; margin: 0 auto; }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .why-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 1.8rem 1.5rem;
+    text-align: center;
+    transition: all 0.3s;
+  }
+  .why-card:hover {
+    border-color: rgba(201,168,76,0.3);
+    background: rgba(201,168,76,0.04);
+    transform: translateY(-4px);
+  }
+
+  .why-icon {
+    width: 60px; height: 60px;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; margin: 0 auto 1rem;
+    transition: all 0.3s;
+  }
+  .why-card:hover .why-icon {
+    background: rgba(201,168,76,0.18);
+    box-shadow: 0 8px 24px rgba(201,168,76,0.2);
+  }
+
+  .why-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.5rem; }
+  .why-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* ── FLOATING CART ── */
+  .cart-panel {
+    position: fixed; right: 0; top: 70px; bottom: 0;
+    width: 360px;
+    background: var(--dark2);
+    border-left: 1px solid rgba(201,168,76,0.15);
+    z-index: 900; display: flex; flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+  .cart-panel.open { transform: translateX(0); }
+
+  .cart-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 850; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  .cart-overlay.show { opacity: 1; pointer-events: all; }
+
+  .cart-header {
+    padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .cart-header h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+  .cart-close {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text-muted); width: 32px; height: 32px; border-radius: 8px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; font-size: 0.9rem;
+  }
+  .cart-close:hover { color: var(--text); background: rgba(255,255,255,0.1); }
+
+  .cart-items {
+    flex: 1; overflow-y: auto; padding: 1rem 1.5rem;
+    display: flex; flex-direction: column; gap: 0.8rem;
+  }
+
+  .cart-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--text-dim); text-align: center; gap: 1rem; }
+  .cart-empty-icon { font-size: 3rem; opacity: 0.3; }
+  .cart-empty p { font-size: 0.85rem; }
+
+  .cart-item {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px; padding: 12px;
+    display: flex; align-items: center; gap: 10px;
+    animation: slideIn 0.3s ease;
+  }
+  @keyframes slideIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+
+  .cart-item-icon {
+    font-size: 1.8rem; flex-shrink: 0;
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(201,168,76,0.08); border-radius: 8px;
+  }
+  .cart-item-info { flex: 1; min-width: 0; }
+  .cart-item-name { font-size: 0.83rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cart-item-price { font-size: 0.82rem; color: var(--gold); font-weight: 700; }
+  .cart-item-remove { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 0.85rem; padding: 4px; border-radius: 4px; transition: color 0.2s; }
+  .cart-item-remove:hover { color: var(--red); }
+
+  .cart-footer { padding: 1.2rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.06); }
+  .cart-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; }
+  .cart-total-label { font-size: 0.85rem; color: var(--text-muted); }
+  .cart-total-amount { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--gold); }
+
+  /* ── PAYMENT ── */
+  .payment-section { margin-bottom: 1rem; }
+  .payment-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.6rem; }
+  .payment-options { display: flex; gap: 0.5rem; margin-bottom: 0.8rem; flex-wrap: wrap; }
+
+  .payment-opt {
+    flex: 1; min-width: 70px; padding: 8px 6px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px; background: rgba(255,255,255,0.03);
+    color: var(--text-muted); font-size: 0.68rem; text-align: center;
+    cursor: pointer; transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+  }
+  .payment-opt:hover { border-color: rgba(201,168,76,0.3); color: var(--text); }
+  .payment-opt.selected { border-color: var(--gold); background: rgba(201,168,76,0.1); color: var(--gold); }
+  .payment-opt .opt-icon { font-size: 1.1rem; margin-bottom: 2px; }
+  .payment-opt .opt-name { font-weight: 600; display: block; }
+
+  .payment-number {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px; padding: 10px 14px; font-size: 0.82rem;
+    color: var(--text-muted); text-align: center; transition: all 0.3s;
+    min-height: 38px; display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .payment-number.active { border-color: rgba(34,197,94,0.3); background: rgba(34,197,94,0.05); color: var(--green); font-weight: 600; }
+
+  .btn-confirm {
+    width: 100%;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: white; border: none; padding: 13px; border-radius: 10px;
+    font-weight: 700; font-size: 0.9rem; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: all 0.2s; letter-spacing: 0.3px;
+  }
+  .btn-confirm:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(37,211,102,0.3); }
+  .btn-confirm:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  /* ── HOW IT WORKS ── */
+  .how-it-works {
+    background: rgba(255,255,255,0.02);
+    border-top: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    padding: 4rem 2rem; margin: 2rem 0;
+  }
+  .how-inner { max-width: 1000px; margin: 0 auto; }
+  .steps-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem; margin-top: 2.5rem;
+  }
+  .step { text-align: center; }
+  .step-num {
+    width: 56px; height: 56px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.2rem;
+    color: var(--black); margin: 0 auto 1rem;
+    box-shadow: 0 8px 24px rgba(201,168,76,0.3);
+  }
+  .step h4 { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .step p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* ── TRUST BAR ── */
+  .trust-bar {
+    max-width: 1200px; margin: 0 auto; padding: 2rem;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;
+  }
+  .trust-item {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 12px; padding: 14px 18px;
+    transition: border-color 0.3s;
+  }
+  .trust-item:hover { border-color: rgba(201,168,76,0.2); }
+  .trust-icon { font-size: 1.4rem; color: var(--gold); flex-shrink: 0; }
+  .trust-text { line-height: 1.2; }
+  .trust-title { font-size: 0.82rem; font-weight: 600; }
+  .trust-sub { font-size: 0.72rem; color: var(--text-muted); }
+
+  /* ── FAQ ── */
+  .faq-list { display: flex; flex-direction: column; gap: 0.8rem; }
+  .faq-item {
+    background: var(--card-bg); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px; overflow: hidden; transition: border-color 0.3s;
+  }
+  .faq-item:hover { border-color: rgba(201,168,76,0.15); }
+  .faq-q {
+    width: 100%; background: none; border: none; color: var(--text);
+    padding: 16px 20px; text-align: left; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500;
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem; transition: color 0.2s;
+  }
+  .faq-q:hover { color: var(--gold); }
+  .faq-q .faq-arrow { transition: transform 0.3s; color: var(--text-muted); }
+  .faq-item.open .faq-arrow { transform: rotate(180deg); color: var(--gold); }
+  .faq-a {
+    max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+    padding: 0 20px; font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;
+  }
+  .faq-item.open .faq-a { max-height: 200px; padding: 0 20px 16px; }
+
+  /* ── CONTACT ── */
+  .contact-strip {
+    background: linear-gradient(135deg, rgba(201,168,76,0.08), rgba(201,168,76,0.03));
+    border: 1px solid rgba(201,168,76,0.15); border-radius: 16px;
+    padding: 2.5rem; text-align: center;
+    max-width: 1160px; margin: 2rem auto;
+  }
+  .contact-strip h3 { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+  .contact-strip p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+  .contact-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+  .btn-wa {
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: white; border: none; padding: 12px 24px; border-radius: 10px;
+    font-weight: 700; font-size: 0.9rem; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    display: flex; align-items: center; gap: 8px;
+    text-decoration: none; transition: all 0.2s;
+  }
+  .btn-wa:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,211,102,0.3); }
+
+  .btn-fb {
+    background: rgba(24, 119, 242, 0.1); color: #1877F2;
+    border: 1px solid rgba(24,119,242,0.3);
+    padding: 12px 24px; border-radius: 10px;
+    font-weight: 700; font-size: 0.9rem; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    display: flex; align-items: center; gap: 8px;
+    text-decoration: none; transition: all 0.2s;
+  }
+  .btn-fb:hover { background: rgba(24, 119, 242, 0.2); transform: translateY(-2px); }
+
+  /* ── FOOTER ── */
+  footer { background: var(--dark2); border-top: 1px solid rgba(255,255,255,0.05); padding: 3rem 2rem 1.5rem; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3rem; margin-bottom: 2.5rem; }
+  .footer-brand p { font-size: 0.83rem; color: var(--text-muted); line-height: 1.7; margin-top: 1rem; max-width: 280px; }
+
+  .footer-social { display: flex; gap: 10px; margin-top: 1.2rem; }
+  .social-btn {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; text-decoration: none; transition: all 0.2s;
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.03);
+  }
+  .social-btn:hover { background: rgba(201,168,76,0.15); border-color: rgba(201,168,76,0.3); color: var(--gold); transform: translateY(-2px); }
+  .social-btn.fb:hover { background: rgba(24,119,242,0.15); border-color: rgba(24,119,242,0.3); color: #1877F2; }
+  .social-btn.wa:hover { background: rgba(37,211,102,0.15); border-color: rgba(37,211,102,0.3); color: #25D366; }
+
+  .footer-col h4 {
+    font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); margin-bottom: 1rem;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .footer-col ul li a { color: var(--text-muted); text-decoration: none; font-size: 0.83rem; transition: color 0.2s; }
+  .footer-col ul li a:hover { color: var(--gold); }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem; font-size: 0.78rem; color: var(--text-dim);
+  }
+  .footer-bottom .heart { color: var(--gold); }
+
+  /* ── TOAST ── */
+  .toast-container {
+    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    z-index: 9999; display: flex; flex-direction: column; gap: 0.6rem;
+    align-items: center; pointer-events: none;
+  }
+  .toast {
+    background: var(--dark3); border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text); padding: 10px 20px; border-radius: 10px;
+    font-size: 0.83rem; display: flex; align-items: center; gap: 8px;
+    animation: toastIn 0.4s ease, toastOut 0.4s ease 2.6s forwards;
+    white-space: nowrap; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  @keyframes toastIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes toastOut { from{opacity:1;transform:translateY(0)} to{opacity:0;transform:translateY(-10px)} }
+
+  /* ── FLOATING FB BUTTON ── */
+  .float-fb {
+    position: fixed; bottom: 2rem; right: 2rem;
+    z-index: 800;
+    background: #1877F2;
+    color: white; border: none;
+    width: 54px; height: 54px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(24,119,242,0.5);
+    transition: all 0.3s;
+    animation: floatBounce 3s ease-in-out infinite;
+  }
+  .float-fb:hover { transform: scale(1.1); box-shadow: 0 12px 30px rgba(24,119,242,0.6); animation: none; }
+  .float-fb .fb-tooltip {
+    position: absolute; right: 64px;
+    background: var(--dark3); border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text); font-size: 0.75rem; font-weight: 600;
+    padding: 6px 12px; border-radius: 8px; white-space: nowrap;
+    opacity: 0; transition: opacity 0.3s; pointer-events: none;
+  }
+  .float-fb:hover .fb-tooltip { opacity: 1; }
+  @keyframes floatBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    .hero { padding: 50px 1.5rem 40px; }
+    .hero-stats { gap: 1.5rem; padding: 12px 20px; }
+    .cart-panel { width: 100%; }
+    .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+    .nav-link { display: none; }
+    .contact-strip { padding: 1.5rem; margin: 1rem; }
+    .float-fb { bottom: 1.5rem; right: 1.5rem; }
+    .promo-banner { font-size: 0.7rem; }
+  }
+  @media (max-width: 480px) {
+    .products-grid { grid-template-columns: 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .why-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="gold-line-top"></div>
+
+<!-- PROMO BANNER -->
+<div class="promo-banner">
+  <span class="blink"></span>
+  🎁 Paiement local accepté · Livraison WhatsApp instantanée · 50K+ abonnés nous font confiance
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">D</div>
+      <div class="logo-text">
+        <div class="name">DPJ Astuces Tech</div>
+        <div class="tagline">Boutique Numérique · Chad</div>
+      </div>
+    </a>
+    <div class="nav-right">
+      <a href="#produits" class="nav-link">Produits</a>
+      <a href="#temoignages" class="nav-link">Avis</a>
+      <a href="#comment" class="nav-link">Comment ça marche</a>
+      <a href="#faq" class="nav-link">FAQ</a>
+      <button class="cart-btn" onclick="toggleCart()">
+        <i class="fas fa-shopping-bag"></i>
+        Panier
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-badge">
+    <i class="fas fa-bolt"></i>
+    Livraison instantanée par WhatsApp
+  </div>
+  <h1>Maîtrise ton <span class="accent">Android</span> &<br>ta <span class="accent">Cybersécurité</span></h1>
+  <p>Des guides numériques premium et des formations pratiques pour protéger ta vie digitale et booster tes compétences tech. Paiement local, accès immédiat.</p>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">50K+</div>
+      <div class="stat-label">Abonnés FB</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">300+</div>
+      <div class="stat-label">Codes secrets</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Satisfaction</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">4</div>
+      <div class="stat-label">Opérateurs</div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item fade-in">
+    <div class="trust-icon"><i class="fas fa-shield-halved"></i></div>
+    <div class="trust-text">
+      <div class="trust-title">Paiement sécurisé</div>
+      <div class="trust-sub">Orange · Airtel · Moov · Wave</div>
+    </div>
+  </div>
+  <div class="trust-item fade-in">
+    <div class="trust-icon"><i class="fab fa-whatsapp"></i></div>
+    <div class="trust-text">
+      <div class="trust-title">Livraison WhatsApp</div>
+      <div class="trust-sub">En quelques minutes</div>
+    </div>
+  </div>
+  <div class="trust-item fade-in">
+    <div class="trust-icon"><i class="fas fa-headset"></i></div>
+    <div class="trust-text">
+      <div class="trust-title">Support 24/7</div>
+      <div class="trust-sub">Assistance disponible</div>
+    </div>
+  </div>
+  <div class="trust-item fade-in">
+    <div class="trust-icon"><i class="fas fa-certificate"></i></div>
+    <div class="trust-text">
+      <div class="trust-title">Contenu vérifié</div>
+      <div class="trust-sub">Guides certifiés</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<div class="section" id="produits">
+  <div class="section-header fade-in">
+    <div>
+      <div class="section-label">— Catalogue</div>
+      <div class="section-title">Nos Produits Numériques</div>
+    </div>
+  </div>
+  <div class="products-grid" id="productsGrid"></div>
+</div>
+
+<!-- WHY US -->
+<div class="why-section">
+  <div class="why-inner">
+    <div style="text-align:center;" class="fade-in">
+      <div class="section-label">— Pourquoi nous</div>
+      <div class="section-title">Ce qui nous rend différents</div>
+    </div>
+    <div class="why-grid">
+      <div class="why-card fade-in">
+        <div class="why-icon">🇹🇩</div>
+        <div class="why-title">Fait pour l'Afrique</div>
+        <div class="why-desc">Contenu adapté aux réalités africaines, paiement local, support en français.</div>
+      </div>
+      <div class="why-card fade-in">
+        <div class="why-icon">⚡</div>
+        <div class="why-title">Livraison immédiate</div>
+        <div class="why-desc">Dès confirmation du paiement, ton guide arrive sur WhatsApp en moins de 5 min.</div>
+      </div>
+      <div class="why-card fade-in">
+        <div class="why-icon">✅</div>
+        <div class="why-title">Contenu testé</div>
+        <div class="why-desc">Chaque guide est vérifié sur des appareils réels, avec notre système de fiabilité.</div>
+      </div>
+      <div class="why-card fade-in">
+        <div class="why-icon">🔐</div>
+        <div class="why-title">Expert en cybersécurité</div>
+        <div class="why-desc">Créé par DEUDIBE Jacques, passionné de cybersécurité et tech depuis des années.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<div class="testimonials-section" id="temoignages">
+  <div class="testimonials-inner">
+    <div style="text-align:center;" class="fade-in">
+      <div class="section-label">— Témoignages</div>
+      <div class="section-title">Ce que disent nos clients</div>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card fade-in">
+        <div class="testimonial-quote">"</div>
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">Le guide des 300 codes Android est incroyable ! J'ai découvert des menus cachés sur mon Tecno que je ne connaissais vraiment pas. Le système de fiabilité est super utile.</div>
+        <div class="testimonial-footer">
+          <div class="testimonial-avatar">A</div>
+          <div>
+            <div class="testimonial-name">Abdoulaye M.</div>
+            <div class="testimonial-location">N'Djamena, Tchad</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card fade-in">
+        <div class="testimonial-quote">"</div>
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">La formation cybersécurité 3 jours m'a vraiment ouvert les yeux. Maintenant je sais comment protéger mon Facebook et mon WhatsApp. Merci DPJ !</div>
+        <div class="testimonial-footer">
+          <div class="testimonial-avatar">F</div>
+          <div>
+            <div class="testimonial-name">Fatima K.</div>
+            <div class="testimonial-location">Moundou, Tchad</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card fade-in">
+        <div class="testimonial-quote">"</div>
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">Paiement via Airtel Money, reçu le PDF en 3 minutes chrono. Service sérieux, contenu de qualité. Je recommande à tous mes amis sans hésiter !</div>
+        <div class="testimonial-footer">
+          <div class="testimonial-avatar">I</div>
+          <div>
+            <div class="testimonial-name">Idriss S.</div>
+            <div class="testimonial-location">Abéché, Tchad</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how-it-works" id="comment">
+  <div class="how-inner">
+    <div style="text-align:center;" class="fade-in">
+      <div class="section-label">— Processus</div>
+      <div class="section-title">Comment ça marche ?</div>
+    </div>
+    <div class="steps-grid">
+      <div class="step fade-in">
+        <div class="step-num">1</div>
+        <h4>Choisis ton produit</h4>
+        <p>Parcours le catalogue, ajoute au panier les guides ou formations qui t'intéressent.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="step-num">2</div>
+        <h4>Sélectionne l'opérateur</h4>
+        <p>Choisis Airtel Money, Moov Money, Orange Money ou Wave selon ton opérateur.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="step-num">3</div>
+        <h4>Effectue le paiement</h4>
+        <p>Envoie le montant total au numéro affiché : <strong style="color:var(--gold)">+235 94302074</strong>.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="step-num">4</div>
+        <h4>Confirme par WhatsApp</h4>
+        <p>Clique sur "Confirmer" — WhatsApp s'ouvre avec ton résumé automatique. Reçois ton guide instantanément !</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="section" id="faq">
+  <div class="section-header fade-in">
+    <div>
+      <div class="section-label">— Questions fréquentes</div>
+      <div class="section-title">FAQ</div>
+    </div>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item fade-in">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Comment je reçois mon produit après paiement ?
+        <i class="fas fa-chevron-down faq-arrow"></i>
+      </button>
+      <div class="faq-a">Après confirmation de ton paiement sur WhatsApp, on t'envoie directement le fichier PDF ou le lien de ta formation par WhatsApp, généralement en moins de 5 minutes pendant les heures ouvrables.</div>
+    </div>
+    <div class="faq-item fade-in">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Quels opérateurs de paiement sont acceptés ?
+        <i class="fas fa-chevron-down faq-arrow"></i>
+      </button>
+      <div class="faq-a">Nous acceptons Airtel Money, Moov Money, Orange Money et Wave. Le numéro de paiement est le même pour tous : +235 94302074. Sélectionne simplement ton opérateur dans le panier.</div>
+    </div>
+    <div class="faq-item fade-in">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Est-ce que je peux acheter plusieurs produits à la fois ?
+        <i class="fas fa-chevron-down faq-arrow"></i>
+      </button>
+      <div class="faq-a">Oui ! Ajoute autant de produits que tu veux au panier. Le total sera calculé automatiquement. Tu envoies un seul paiement pour tout et tu reçois tous tes produits d'un coup.</div>
+    </div>
+    <div class="faq-item fade-in">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Les codes Android fonctionnent sur tous les téléphones ?
+        <i class="fas fa-chevron-down faq-arrow"></i>
+      </button>
+      <div class="faq-a">Notre guide "300 Codes Secrets Android" utilise un système de classification : ✅ GARANTI (fonctionne partout), ⚠️ VARIABLE (dépend du fabricant), 🔧 EXPERT (nécessite des droits avancés). Chaque code est clairement étiqueté.</div>
+    </div>
+    <div class="faq-item fade-in">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        La formation cybersécurité est-elle pour débutants ?
+        <i class="fas fa-chevron-down faq-arrow"></i>
+      </button>
+      <div class="faq-a">Oui, notre Formation Cybersécurité 3 jours est conçue pour être accessible à tous les niveaux. Elle couvre la sécurité WhatsApp, Facebook et Gmail de façon progressive, avec des exemples pratiques adaptés à l'Afrique.</div>
+    </div>
+    <div class="faq-item fade-in">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Puis-je obtenir un remboursement ?
+        <i class="fas fa-chevron-down faq-arrow"></i>
+      </button>
+      <div class="faq-a">En raison de la nature numérique des produits, nous ne proposons pas de remboursement après livraison. Cependant, si tu as un problème avec ton fichier (corrompu, incomplet), contacte-nous et on le résoudra immédiatement.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div style="padding: 0 2rem;">
+  <div class="contact-strip fade-in">
+    <h3>Une question ? On est là 🤝</h3>
+    <p>Notre équipe est disponible sur WhatsApp et Facebook pour t'aider avant et après ton achat.</p>
+    <div class="contact-buttons">
+      <a href="https://wa.me/23594302074" target="_blank" class="btn-wa">
+        <i class="fab fa-whatsapp"></i>
+        WhatsApp : +235 943 02 074
+      </a>
+      <a href="https://www.facebook.com/DPJAstuceTech" target="_blank" class="btn-fb">
+        <i class="fab fa-facebook"></i>
+        Page Facebook
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-icon">D</div>
+          <div class="logo-text">
+            <div class="name">DPJ Astuces Tech</div>
+            <div class="tagline">Boutique Numérique</div>
+          </div>
+        </div>
+        <p>Ta boutique numérique de référence au Tchad. Guides Android, sécurité digitale et formations pratiques. Créé avec passion pour la communauté tech francophone africaine.</p>
+        <div class="footer-social">
+          <a href="https://www.facebook.com/DPJAstuceTech" target="_blank" class="social-btn fb" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://wa.me/23594302074" target="_blank" class="social-btn wa" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          <a href="#" class="social-btn" title="Chariow"><i class="fas fa-store"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Produits</h4>
+        <ul>
+          <li><a href="#produits">300 Codes Secrets Android</a></li>
+          <li><a href="#produits">Guide Sécurité WA/FB/Gmail</a></li>
+          <li><a href="#produits">Formation Cybersécurité</a></li>
+          <li><a href="#produits">Pack Astuces Android+WA</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Aide</h4>
+        <ul>
+          <li><a href="#comment">Comment acheter</a></li>
+          <li><a href="#temoignages">Témoignages</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="https://wa.me/23594302074" target="_blank">Support WhatsApp</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 DPJ Astuces Tech · N'Djamena, Tchad · Tous droits réservés</span>
+      <span>Fait avec <span class="heart">♥</span> par DEUDIBE Jacques</span>
+    </div>
+  </div>
+</footer>
+
+<!-- CART OVERLAY -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+<!-- CART PANEL -->
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h3><i class="fas fa-shopping-bag" style="color:var(--gold)"></i> Mon Panier</h3>
+    <button class="cart-close" onclick="toggleCart()"><i class="fas fa-times"></i></button>
+  </div>
+
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty" id="cartEmpty">
+      <div class="cart-empty-icon">🛍️</div>
+      <p>Ton panier est vide.<br>Ajoute un produit pour commencer !</p>
+    </div>
+  </div>
+
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span class="cart-total-label">Total à payer</span>
+      <span class="cart-total-amount" id="cartTotal">0 <small style="font-size:0.6em;font-weight:400;color:var(--text-muted)">FCFA</small></span>
+    </div>
+
+    <div class="payment-section">
+      <div class="payment-label">Mode de paiement</div>
+      <div class="payment-options">
+        <div class="payment-opt" onclick="selectPayment('airtel', this)">
+          <div class="opt-icon">📱</div>
+          <span class="opt-name">Airtel</span>
+        </div>
+        <div class="payment-opt" onclick="selectPayment('moov', this)">
+          <div class="opt-icon">💚</div>
+          <span class="opt-name">Moov</span>
+        </div>
+        <div class="payment-opt" onclick="selectPayment('orange', this)">
+          <div class="opt-icon">🟠</div>
+          <span class="opt-name">Orange</span>
+        </div>
+        <div class="payment-opt" onclick="selectPayment('wave', this)">
+          <div class="opt-icon">🌊</div>
+          <span class="opt-name">Wave</span>
+        </div>
+      </div>
+      <div class="payment-number" id="paymentNumber">
+        <i class="fas fa-info-circle"></i>
+        Sélectionne un opérateur ci-dessus
+      </div>
+    </div>
+
+    <button class="btn-confirm" id="confirmBtn" onclick="confirmOrder()" disabled>
+      <i class="fab fa-whatsapp"></i>
+      Confirmer le paiement via WhatsApp
+    </button>
+  </div>
+</div>
+
+<!-- FLOATING FACEBOOK BUTTON -->
+<a href="https://www.facebook.com/DPJAstuceTech" target="_blank" class="float-fb">
+  <i class="fab fa-facebook-f"></i>
+  <span class="fb-tooltip">Suivre sur Facebook</span>
+</a>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ── DATA ──
+const products = [
+  {
+    id: 1,
+    icon: '📱',
+    bg: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+    badge: 'popular',
+    badgeText: 'Populaire',
+    title: '300 Codes Secrets Android',
+    desc: 'Le guide ultime des codes USSD et secrets Android. Accède aux menus cachés, diagnostics et fonctions avancées de ton téléphone.',
+    features: ['Système de fiabilité ✅⚠️🔧', 'Codes MTK / Samsung / Huawei', 'Menus cachés & diagnostics', 'Mises à jour incluses'],
+    price: 1500,
+    sales: 127
+  },
+  {
+    id: 2,
+    icon: '🔐',
+    bg: 'linear-gradient(135deg, #0a1628 0%, #112240 100%)',
+    badge: 'new',
+    badgeText: 'Nouveau',
+    title: 'Guide Sécurité WhatsApp, Facebook & Gmail',
+    desc: 'Protège ta vie privée sur les 3 plateformes les plus utilisées. Détecte les hackers, sécurise tes comptes, évite les arnaques.',
+    features: ['WhatsApp : chiffrement & sécurité', 'Facebook : paramètres avancés', 'Gmail : authentification 2FA', 'Bonus : détecter le phishing'],
+    price: 2000,
+    sales: 84
+  },
+  {
+    id: 3,
+    icon: '🛡️',
+    bg: 'linear-gradient(135deg, #1a0a00 0%, #2d1500 100%)',
+    badge: 'hot',
+    badgeText: '⭐ Best-seller',
+    title: 'Formation Cybersécurité 3 Jours',
+    desc: 'Formation intensive couvrant tout ce dont tu as besoin pour te protéger et protéger tes proches dans le monde numérique.',
+    features: ['Jour 1 : Sécurité WhatsApp', 'Jour 2 : Sécurité Facebook', 'Jour 3 : Gmail & Mots de passe', 'Certificat de complétion'],
+    price: 5000,
+    sales: 56
+  },
+  {
+    id: 4,
+    icon: '⚡',
+    bg: 'linear-gradient(135deg, #0d1a0d 0%, #1a2e1a 100%)',
+    badge: 'popular',
+    badgeText: 'Populaire',
+    title: 'Pack Astuces Android + WhatsApp',
+    desc: 'Le combo parfait : maîtrise ton Android ET optimise ton WhatsApp. Deux guides complets en un seul pack économique.',
+    features: ['50+ astuces Android exclusives', '30+ astuces WhatsApp Pro', 'Personnalisation avancée', 'Économise par rapport à l\'achat séparé'],
+    price: 3000,
+    sales: 98
+  }
+];
+
+let cart = [];
+let selectedPayment = null;
+
+// ── RENDER PRODUCTS ──
+function renderProducts() {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = products.map(p => `
+    <div class="product-card fade-in">
+      <div class="product-img" style="background:${p.bg}">
+        <span style="position:relative;z-index:1;font-size:3.5rem">${p.icon}</span>
+        <span class="product-badge badge-${p.badge}">${p.badgeText}</span>
+        <span class="sales-counter"><i class="fas fa-fire" style="font-size:0.6rem"></i> ${p.sales} ventes</span>
+      </div>
+      <div class="product-body">
+        <div class="product-title">${p.title}</div>
+        <div class="product-desc">${p.desc}</div>
+        <ul class="product-features">
+          ${p.features.map(f => `<li>${f}</li>`).join('')}
+        </ul>
+        <div class="product-footer">
+          <div class="product-price">${p.price.toLocaleString('fr-FR')}<span class="price-currency"> FCFA</span></div>
+          <button class="btn-add" onclick="addToCart(${p.id})">
+            <i class="fas fa-plus"></i> Ajouter
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  // Trigger fade-in observer for newly rendered cards
+  observeFadeIns();
+}
+
+// ── CART LOGIC ──
+function addToCart(id) {
+  const product = products.find(p => p.id === id);
+  const existing = cart.find(i => i.id === id);
+  if (existing) {
+    showToast('⚠️ Ce produit est déjà dans ton panier !');
+    return;
+  }
+  cart.push({ ...product });
+  updateCartUI();
+  bumpCount();
+  showToast(`✅ "${product.title}" ajouté au panier !`);
+  if (!document.getElementById('cartPanel').classList.contains('open')) {
+    toggleCart();
+  }
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(i => i.id !== id);
+  updateCartUI();
+  showToast('🗑️ Article retiré du panier');
+}
+
+function updateCartUI() {
+  const total = cart.reduce((sum, i) => sum + i.price, 0);
+  document.getElementById('cartCount').textContent = cart.length;
+  document.getElementById('cartTotal').innerHTML = total.toLocaleString('fr-FR') + ' <small style="font-size:0.6em;font-weight:400;color:var(--text-muted)">FCFA</small>';
+
+  const itemsEl = document.getElementById('cartItems');
+  const empty = document.getElementById('cartEmpty');
+
+  if (cart.length === 0) {
+    empty.style.display = 'flex';
+    itemsEl.querySelectorAll('.cart-item').forEach(el => el.remove());
+    updateConfirmBtn(); return;
+  }
+
+  empty.style.display = 'none';
+  itemsEl.querySelectorAll('.cart-item').forEach(el => el.remove());
+
+  cart.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'cart-item';
+    el.innerHTML = `
+      <div class="cart-item-icon">${item.icon}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.title}</div>
+        <div class="cart-item-price">${item.price.toLocaleString('fr-FR')} FCFA</div>
+      </div>
+      <button class="cart-item-remove" onclick="removeFromCart(${item.id})" title="Supprimer">
+        <i class="fas fa-trash"></i>
+      </button>
+    `;
+    itemsEl.insertBefore(el, empty);
+  });
+  updateConfirmBtn();
+}
+
+function updateConfirmBtn() {
+  document.getElementById('confirmBtn').disabled = cart.length === 0 || !selectedPayment;
+}
+
+// ── PAYMENT ──
+function selectPayment(type, el) {
+  selectedPayment = type;
+  document.querySelectorAll('.payment-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+
+  const numEl = document.getElementById('paymentNumber');
+  const labels = {
+    airtel: '📱 Airtel Money → +235 94 30 20 74',
+    moov: '💚 Moov Money → +235 94 30 20 74',
+    orange: '🟠 Orange Money → +235 94 30 20 74',
+    wave: '🌊 Wave → +235 94 30 20 74'
+  };
+  numEl.innerHTML = `<i class="fas fa-check-circle"></i> ${labels[type]}`;
+  numEl.classList.add('active');
+  updateConfirmBtn();
+}
+
+// ── CONFIRM ORDER ──
+function confirmOrder() {
+  if (cart.length === 0 || !selectedPayment) return;
+
+  const total = cart.reduce((sum, i) => sum + i.price, 0);
+  const paymentLabels = { airtel: 'Airtel Money', moov: 'Moov Money', orange: 'Orange Money', wave: 'Wave' };
+  const itemsList = cart.map(i => `• ${i.title} – ${i.price.toLocaleString('fr-FR')} FCFA`).join('\n');
+
+  const message = `🛒 *Nouvelle Commande – DPJ Astuces Tech*\n\n📦 *Produits commandés :*\n${itemsList}\n\n💰 *Total : ${total.toLocaleString('fr-FR')} FCFA*\n💳 *Moyen de paiement : ${paymentLabels[selectedPayment]}*\n\n✅ J'ai effectué le paiement de *${total.toLocaleString('fr-FR')} FCFA* via ${paymentLabels[selectedPayment]} au numéro *+235 94 30 20 74*.\n\nMerci de confirmer la réception et m'envoyer mes produits ! 🙏`;
+
+  window.open(`https://wa.me/23594302074?text=${encodeURIComponent(message)}`, '_blank');
+
+  cart = [];
+  selectedPayment = null;
+  document.querySelectorAll('.payment-opt').forEach(o => o.classList.remove('selected'));
+  document.getElementById('paymentNumber').innerHTML = '<i class="fas fa-info-circle"></i> Sélectionne un opérateur ci-dessus';
+  document.getElementById('paymentNumber').classList.remove('active');
+  updateCartUI();
+  showToast('🎉 Commande envoyée ! Check WhatsApp.');
+}
+
+// ── CART TOGGLE ──
+function toggleCart() {
+  document.getElementById('cartPanel').classList.toggle('open');
+  document.getElementById('cartOverlay').classList.toggle('show');
+}
+
+// ── BUMP ──
+function bumpCount() {
+  const el = document.getElementById('cartCount');
+  el.classList.remove('bump');
+  void el.offsetWidth;
+  el.classList.add('bump');
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerHTML = msg;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 3100);
+}
+
+// ── FAQ ──
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+
+// ── SCROLL FADE-IN OBSERVER ──
+function observeFadeIns() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in:not(.visible)').forEach(el => observer.observe(el));
+}
+
+// ── INIT ──
+renderProducts();
+observeFadeIns();
+</script>
+</body>
+</html>
